@@ -5,7 +5,9 @@ from bson.json_util import loads,dumps,default
 from bson import ObjectId
 from yaml import SafeLoader,FullLoader
 import yaml
-
+from ruamel.yaml import YAML
+import sys
+from rasa.nlu.convert import convert_training_data
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -98,16 +100,48 @@ class IndentDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
         return super(IndentDumper, self).increase_indent(flow, False)
 
+                    
 
 @app.route('/intent',methods=['POST'])
 def create_intent():
     if request.method == 'POST':
         data = request.data
         data = json.loads(data)
-        print(data['intent'])
+
+        print(data)
+        # print(data['intent'])
         # working
-        with open('/home/user5/django/rasachat/data/nlu.yml','a') as nlu:
-            nlu.write("\n\n- intent: {}\n  examples: |".format(data['intent']))
-            for i in data['examples']:
-                nlu.write("\n    - {}".format(i))
-    return {'data':data}
+        # with open('/home/user5/django/rasachat/data/nlu.yml','a') as nlu:
+        #     nlu.write("\n\n- intent: {}\n  examples: |".format(data['intent']))
+        #     for i in data['examples']:
+        #         nlu.write("\n    - {}".format(i))
+
+    code = None
+    with open('/home/user5/django/rasachat/data/domain.yml') as file:
+        yaml2 = YAML()
+        code = yaml2.load(file)
+        yaml2.sort_key = False
+        # doc = yaml.load(file, Loader=yaml.FullLoader)
+        print(type(code))
+        code['intents'].append('add')
+        print(code['intents'])
+
+    with open("/home/user5/django/rasachat/data/domain.yml", "w") as f:
+        yaml2.indent(mapping=2, sequence=3, offset=2)
+        yaml2.dump(code, f)
+    # #     f.write(sort_file.replace('\n- ', '\n\n- '))
+    #     sort_file = ''
+    #     print(type(doc))
+    #     doc['intents'].append('add')
+    #     for i in doc:
+    #         if i == 'version':
+    #             sort_file += i + ':'
+    #         else:
+    #             sort_file += i + ':\n'
+    #         sort_file += yaml.dump(doc[i],Dumper=IndentDumper,sort_keys=False,default_flow_style= False)
+    #         sort_file += '\n'
+    #     print(sort_file)
+    #     f.write(sort_file)
+    #     print(type(sort_file),'end')
+
+    return {'data':'success'}

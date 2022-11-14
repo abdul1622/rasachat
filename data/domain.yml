@@ -1,6 +1,6 @@
 version: "3.1"
 
-intents:
+intents: 
   - greet
   - goodbye
   - affirm
@@ -31,6 +31,7 @@ slots:
     mappings:
     - type : from_entity
       entity: city
+
 
 
 responses:
