@@ -1,0 +1,32 @@
+    doc = None
+    with open('/home/user5/django/rasachat/data/domain.yml') as file:
+        doc = yaml.load(file, Loader=yaml.FullLoader)
+    
+    with open("/home/user5/django/rasachat/data/domain.yml", "w") as f:
+    #     f.write(sort_file.replace('\n- ', '\n\n- '))
+        sort_file = ''
+        print(type(doc))
+        doc['intents'].append('add')
+        for i in doc:
+            if i == 'version':
+                sort_file += i + ':'
+            else:
+                sort_file += i + ':\n'
+            sort_file += yaml.dump(doc[i],Dumper=IndentDumper,sort_keys=False,default_flow_style= False)
+            sort_file += '\n'
+        print(sort_file)
+
+        f.write(sort_file)
+
+        print(type(sort_file))
+
+
+
+# add
+# db.posts.insert({'sender':name})
+
+# update
+# db.posts.update_one({y:i[y]},{"$set":{y:'admin'}})
+
+# delete
+# db.posts.delete_one(i)

@@ -48,3 +48,10 @@ stories:
   - action: utter_play_again
   - intent: deny
   - action: utter_goodbye
+
+- story: getting score
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: score
+  - action: utter_score
