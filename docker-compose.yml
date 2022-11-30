@@ -18,3 +18,7 @@ services:
   app:
     image: abdulrahman16/firstchatbot:firstcommit
     expose: ["5055","5"]
+  
+  # flask:
+  #   image: abdulrahman16/firstchatbot:flask-chat
+  #   expose: ["8001","5000"]

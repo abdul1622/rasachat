@@ -9,4 +9,4 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD [ "python3", "-m" , "flask", "run", "--host=*"]
+CMD [ "python3", "-m" , "flask", "--app","app","--dubug",'run', "--host=*"]

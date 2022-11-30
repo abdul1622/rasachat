@@ -14,7 +14,6 @@
   <div id="message-list" class="messagelist">
 
   </div>
-  <input type="text" class="username" id="user" placeholder="User Name">
   <input type="number" name="" id="sender" placeholder="user id">
 
   <input type="number" name="" id="receiver">
@@ -35,36 +34,27 @@
     var user
     var room
     var receiver
-    var id
+    var sender
 
     function chat() {
       socket = io.connect('http://localhost:5000');
-      user = document.getElementById('user').value;
-      id = document.getElementById('sender').value;
+      sender = document.getElementById('sender').value;
       receiver = document.getElementById('receiver').value;
-      console.log(receiver, 'ro')
-      document.getElementById('user').style.display = 'none';
-      // document.getElementById('roomname').style.display = 'none';
-      socket.on('connect', function () {
 
+      document.getElementById('user').style.display = 'none';
+      socket.on('connect', function () {
         console.log('connected')
-        // socket.emit('join_room', {
-        //   username: user,
-        //   room: room,
-        // });
-        // socket.emit('', {
-        //   'user': user,
-        //   'id': id,
-        // })
+        // on socket connect give sender and receiver details
         socket.emit('get_details', {
           sender: id,
           receiver: receiver
         })
       });
+      // data from the previous chat
       socket.on('details', function (data) {
         console.log(data)
       })
-
+      // message data from other user
       socket.on('receive_message', function (data) {
         console.log(data);
         const newNode = document.createElement('div');
@@ -72,16 +62,10 @@
         document.getElementById('message-list').appendChild(newNode);
       });
     }
-
+    // send message
     function send() {
       message = document.getElementById('message').value
-      // socket.send(message)
-      // socket.emit('send_message', {
-      //   username: user,
-      //   room: room,
-      //   message: message,
-      //   receiver: 'receiver'
-      // })
+
       socket.emit('send_message', {
         sender_id: id,
         message: message,
@@ -91,9 +75,7 @@
       message.value = '';
     }
 
-//       socket.on("connect_error", (err) => {
-//   console.log(`connect_error due to ${err.message}`);
-// });
+
   </script>
 
 </body>

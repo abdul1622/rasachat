@@ -51,62 +51,36 @@ def conversation():
 
 @socket.on('connect')
 def connect(message):
-    # print(request.sid)
     print('received message')
-    send(message)
-
-# join room
+    # send(message)
 
 
-@socket.on('join_room')
-def handle_join_room_event(data):
-    print(data['room'], data, 'da')
-    app.logger.info("{} has joined the room {}".format(
-        data['username'], data['room']))
-    join_room(data['room'])
+# get previous chat from previus chat
 
 
 @socket.on('get_details')
 def get_details(data):
-    # if 'id' in data:
     users[data['sender']] = request.sid
     sender = data['sender']
     receiver = data['receiver']
-    chat1 = chats.find({'sender': sender, 'receiver': receiver})
-    chat2 = chats.find({'receiver': sender, 'sender': receiver})
-    chat = []
-    for i in chat1:
-        chat.append(i)
-    for i in chat2:
-        chat.append(i)
-    newlist = sorted(chat, key=itemgetter('created_at'))
-    print('break')
-    for i in newlist:
-        print(i)
-    print(type(newlist))
-    data = dumps(newlist)
-    newlist = loads(data)
-    newlist = JSONEncoder().encode(newlist)
-    print(newlist)
-    if receiver in users:
-        receiver_id = users[receiver]
-        socket.emit('details', newlist, room=receiver_id)
+    send_messages = chats.find({'sender': sender, 'receiver': receiver})
+    received_messages = chats.find({'receiver': sender, 'sender': receiver})
+    messages = []
+    for message in send_messages:
+        messages.append(message)
+    for message in received_messages:
+        messages.append(message)
+    messages = sorted(messages, key=itemgetter('created_at'))
+    messages = JSONEncoder().encode(messages)
     if sender in users:
         sender_id = users[sender]
-        socket.emit('details', newlist, room=sender_id)
-# print(chat1, 'hi', chat2, chat)
+        socket.emit('details', messages, room=sender_id)
 
-
-# @socket.on('send_username')
-# def get_username(data):
-#     # users.append({data['id']: request.sid})
-
-#     # message
+# send message
 
 
 @socket.on('send_message')
 def handle_send_message_event(data):
-    print(data)
     time = datetime.now()
     chats.insert_one(
         {'sender': data['sender_id'], 'message': data['message'], 'receiver': data['receiver_id'], 'created_at': time})
