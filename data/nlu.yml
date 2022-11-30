@@ -94,3 +94,9 @@ nlu:
     examples: |
       - [madurai](city)
       - [london](city)
+  # - intent: direct_conversion
+  #   examples: |
+  #     - customer care
+  #     - want to talk with executive
+  #     - want to talk
+  #     - connect chat

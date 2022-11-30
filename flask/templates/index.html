@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+
+  <div id="message-list" class="messagelist">
+
+  </div>
+  <input type="text" class="username" id="user" placeholder="User Name">
+  <input type="number" name="" id="sender" placeholder="user id">
+
+  <input type="number" name="" id="receiver">
+  <button onclick="chat()">chat</button>
+  <input type="text" class="message" id="message" placeholder="Messages">
+  <button onclick="send()">send</button>
+  <!-- <button onclick="chat()">chat</button> -->
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.3/dist/socket.io.min.js"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    var Messages = []
+    var display = ''
+    var socket = null
+    var user
+    var room
+    var receiver
+    var id
+
+    function chat() {
+      socket = io.connect('http://localhost:5000');
+      user = document.getElementById('user').value;
+      id = document.getElementById('sender').value;
+      receiver = document.getElementById('receiver').value;
+      console.log(receiver, 'ro')
+      document.getElementById('user').style.display = 'none';
+      // document.getElementById('roomname').style.display = 'none';
+      socket.on('connect', function () {
+
+        console.log('connected')
+        // socket.emit('join_room', {
+        //   username: user,
+        //   room: room,
+        // });
+        // socket.emit('', {
+        //   'user': user,
+        //   'id': id,
+        // })
+        socket.emit('get_details', {
+          sender: id,
+          receiver: receiver
+        })
+      });
+      socket.on('details', function (data) {
+        console.log(data)
+      })
+
+      socket.on('receive_message', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;
+        document.getElementById('message-list').appendChild(newNode);
+      });
+    }
+
+    function send() {
+      message = document.getElementById('message').value
+      // socket.send(message)
+      // socket.emit('send_message', {
+      //   username: user,
+      //   room: room,
+      //   message: message,
+      //   receiver: 'receiver'
+      // })
+      socket.emit('send_message', {
+        sender_id: id,
+        message: message,
+        receiver_id: receiver
+      })
+
+      message.value = '';
+    }
+
+//       socket.on("connect_error", (err) => {
+//   console.log(`connect_error due to ${err.message}`);
+// });
+  </script>
+
+</body>
+
+</html>

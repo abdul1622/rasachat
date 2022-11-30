@@ -32,8 +32,6 @@ slots:
     - type : from_entity
       entity: city
 
-
-
 responses:
   utter_greet:
   - text: "Hey! How are you?"
