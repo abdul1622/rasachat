@@ -1,50 +1,56 @@
 version: "3.1"
 
 stories:
+  - story: happy path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: weather_get
+      - action: action_wheather
 
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: weather_get
-  - action: action_wheather
+  - story: sad path 1
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: affirm
+      - action: utter_happy
 
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+  - story: sad path 2
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: deny
+      - action: utter_goodbye
 
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+  - story: play path
+    steps:
+      - intent: play
+      - action: utter_play
+      - intent: inform
+      - action: action_play_rps
+      - action: utter_play_again
 
-- story: play path
-  steps:
-  - intent: play
-  - action: utter_play
-  - intent: inform
-  - action: action_play_rps
-  - action: utter_play_again
+  - story: play again
+    steps:
+      - action: utter_play_again
+      - intent: affirm
+      - action: utter_play
 
-- story: play again
-  steps:
-  - action: utter_play_again
-  - intent: affirm
-  - action: utter_play
+  - story: don't play again
+    steps:
+      - action: utter_play_again
+      - intent: deny
+      - action: utter_goodbye
 
-- story: don't play again
-  steps:
-  - action: utter_play_again
-  - intent: deny
-  - action: utter_goodbye
+  - story: customer care
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: direct_conversion
+      - action: utter_conversation

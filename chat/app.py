@@ -52,15 +52,20 @@ def conversation():
 @socket.on('connect')
 def connect(message):
     print('received message')
+    print(users)
     # send(message)
 
 
+@socket.on('disconnect')
+def disconnect():
+    print('disconnected')
 # get previous chat from previus chat
 
 
 @socket.on('get_details')
 def get_details(data):
     users[data['sender']] = request.sid
+    print('hi')
     sender = data['sender']
     receiver = data['receiver']
     send_messages = chats.find({'sender': sender, 'receiver': receiver})
@@ -71,10 +76,10 @@ def get_details(data):
     for message in received_messages:
         messages.append(message)
     messages = sorted(messages, key=itemgetter('created_at'))
+    print(messages)
     messages = JSONEncoder().encode(messages)
-    if sender in users:
-        sender_id = users[sender]
-        socket.emit('details', messages, room=sender_id)
+    socket.emit('details', messages, room=request.sid)
+    print(users)
 
 # send message
 
@@ -84,9 +89,13 @@ def handle_send_message_event(data):
     time = datetime.now()
     chats.insert_one(
         {'sender': data['sender_id'], 'message': data['message'], 'receiver': data['receiver_id'], 'created_at': time})
+    data['type'] = 'received'
     if data['receiver_id'] in users:
         receiver_id = users[data['receiver_id']]
         socket.emit('receive_message', data, room=receiver_id)
+    data['type'] = 'send'
+    socket.emit('receive_message', data, room=request.sid)
+    # socket.emit('receive message', data, room=rq)
 
 
 # rasa chatbot

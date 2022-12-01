@@ -11,6 +11,7 @@ intents:
   - bot_challenge
   - play
   - weather_get
+  - direct_conversion
 
 entities:
   - choice
@@ -24,44 +25,49 @@ slots:
       - paper
       - scissors
     mappings:
-    - type : from_entity
-      entity: choice
+      - type: from_entity
+        entity: choice
   city:
     type: text
     mappings:
-    - type : from_entity
-      entity: city
+      - type: from_entity
+        entity: city
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+    - text: "Hey! How are you?"
 
   utter_play:
-  - text: "rock paper scissors"
+    - text: "rock paper scissors"
 
   utter_play_again:
-  - text: "do you want play again?"
+    - text: "do you want play again?"
 
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
+    - text: "Here is something to cheer you up:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
-  - text: "Did that help you?"
+    - text: "Did that help you?"
 
   utter_happy:
-  - text: "Great, carry on!"
+    - text: "Great, carry on!"
 
   utter_goodbye:
-  - text: "Bye"
+    - text: "Bye"
 
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+    - text: "I am a bot, powered by Rasa."
+
+  utter_conversation:
+    - text: "do you want chat with customer care"
+      buttons:
+        - title: "Yes"
+          payload: "http://127.0.0.1:5000/"
 
 actions:
   - action_play_rps
   - action_wheather
-
 
 session_config:
   session_expiration_time: 60
