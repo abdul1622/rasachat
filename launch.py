@@ -15,8 +15,14 @@ def flask_server():
           host='127.0.0.1', port=8000)
 
 
+def action_server():
+    os.system('rasa run actions')
+
+
 if __name__ == '__main__':
-    thread = Thread(target=flask_server)
-    thread.start()
+    flask_thread = Thread(target=flask_server)
+    flask_thread.start()
+    action_thread = Thread(target=action_server)
+    action_thread.start()
     print('hi')
-    os.system('docker-compose up')
+    os.system('rasa run -m models --enable-api --cors "*" --debug')
